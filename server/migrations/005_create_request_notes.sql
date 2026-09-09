@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS request_notes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  request_id INT NOT NULL,
+  admin_id INT NOT NULL,
+  note TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (request_id) REFERENCES project_requests(id) ON DELETE CASCADE,
+  FOREIGN KEY (admin_id) REFERENCES admins(id) ON DELETE CASCADE
+);

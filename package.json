@@ -1,0 +1,31 @@
+{
+  "name": "mahmoud-jihad-3d-portfolio",
+  "version": "1.0.0",
+  "description": "Fully immersive, production-quality 3D personal portfolio for Mahmoud Jihad with Client Request Management System",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix client\" \"npm run dev --prefix server\"",
+    "dev:all": "concurrently \"npm run dev --prefix client\" \"npm run dev --prefix server\"",
+    "dev:client": "npm run dev --prefix client",
+    "dev:server": "npm run dev --prefix server",
+    "build": "npm run build --prefix client",
+    "start": "npm run start --prefix server",
+    "install:all": "npm install && npm install --prefix client && npm install --prefix server",
+    "migrate": "npm run migrate --prefix server",
+    "create-admin": "npm run create-admin --prefix server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "keywords": [
+    "threejs",
+    "react-three-fiber",
+    "webgl",
+    "3d-portfolio",
+    "glsl",
+    "gsap",
+    "framer-motion"
+  ],
+  "author": "Mahmoud Jihad",
+  "license": "MIT"
+}
