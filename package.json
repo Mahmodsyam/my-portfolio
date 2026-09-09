@@ -10,7 +10,7 @@
     "dev:server": "npm run dev --prefix server",
     "build": "npm run build --prefix client",
     "start": "npm run start --prefix server",
-    "install:all": "npm install && npm install --prefix client && npm install --prefix server",
+    "install:all": "npm install && npm install --include=dev --prefix client && npm install --prefix server",
     "migrate": "npm run migrate --prefix server",
     "create-admin": "npm run create-admin --prefix server"
   },
