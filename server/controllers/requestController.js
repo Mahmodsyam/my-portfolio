@@ -3,6 +3,23 @@ import { logAction } from '../services/auditService.js';
 import { sendAdminNotification, sendClientConfirmation } from '../services/emailService.js';
 import path from 'path';
 
+export const formatRequest = (r) => {
+  if (!r) return r;
+  return {
+    ...r,
+    clientName: r.full_name || r.clientName || '',
+    clientEmail: r.email || r.clientEmail || '',
+    clientPhone: r.phone || r.clientPhone || '',
+    clientLocation: r.country || r.clientLocation || '',
+    projectName: r.project_name || r.projectName || '',
+    projectType: r.project_type || r.projectType || '',
+    referenceNumber: r.reference_number || r.referenceNumber || '',
+    createdAt: r.created_at || r.createdAt || new Date().toISOString(),
+    updatedAt: r.updated_at || r.updatedAt || new Date().toISOString(),
+    additionalRequirements: r.additional_requirements || r.additionalRequirements || '',
+  };
+};
+
 export const submitRequest = async (req, res) => {
   try {
     let { full_name, email, phone, country, project_name, project_type, description, budget, deadline, additional_requirements } = req.body;
@@ -135,23 +152,6 @@ export const getRequests = async (req, res) => {
 
     const selectSql = `SELECT pr.*, c.full_name, c.email, c.phone, c.country ${baseSql} ORDER BY ${orderBy} LIMIT ${limit} OFFSET ${offset}`;
 
-const formatRequest = (r) => {
-  if (!r) return r;
-  return {
-    ...r,
-    clientName: r.full_name || r.clientName || '',
-    clientEmail: r.email || r.clientEmail || '',
-    clientPhone: r.phone || r.clientPhone || '',
-    clientLocation: r.country || r.clientLocation || '',
-    projectName: r.project_name || r.projectName || '',
-    projectType: r.project_type || r.projectType || '',
-    referenceNumber: r.reference_number || r.referenceNumber || '',
-    createdAt: r.created_at || r.createdAt || new Date().toISOString(),
-    updatedAt: r.updated_at || r.updatedAt || new Date().toISOString(),
-    additionalRequirements: r.additional_requirements || r.additionalRequirements || '',
-  };
-};
-
     const requests = await query(selectSql, params);
 
     return res.status(200).json({
@@ -176,8 +176,8 @@ export const getRequest = async (req, res) => {
       `SELECT pr.*, c.full_name, c.email, c.phone, c.country 
        FROM project_requests pr 
        JOIN clients c ON pr.client_id = c.id 
-       WHERE pr.id = ?`,
-      [id]
+       WHERE pr.id = ? OR pr.reference_number = ?`,
+      [id, id]
     );
 
     if (requests.length === 0) {
@@ -185,8 +185,11 @@ export const getRequest = async (req, res) => {
     }
 
     const request = formatRequest(requests[0]);
-    const attachments = await query('SELECT * FROM request_attachments WHERE request_id = ?', [id]);
-    request.attachments = attachments;
+    const attachments = await query('SELECT * FROM request_attachments WHERE request_id = ?', [request.id]);
+    request.attachments = attachments || [];
+
+    const notes = await query('SELECT * FROM request_notes WHERE request_id = ? ORDER BY created_at DESC', [request.id]);
+    request.notes = notes || [];
 
     return res.status(200).json({ success: true, data: request });
   } catch (error) {
