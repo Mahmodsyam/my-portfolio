@@ -156,16 +156,16 @@ export default function AdminOverview() {
                       isLight ? 'hover:bg-slate-50 text-slate-700' : 'hover:bg-slate-800/30 text-slate-300'
                     }`}
                   >
-                    <td className="px-6 py-4 text-sm font-mono">{String(req.id || req._id).slice(-6)}</td>
-                    <td className="px-6 py-4 text-sm font-medium">{req.clientName}</td>
-                    <td className="px-6 py-4 text-sm">{t.admin?.typeLabels?.[req.projectType] || req.projectType}</td>
+                    <td className="px-6 py-4 text-sm font-mono">{String(req.reference_number || req.referenceNumber || req.id || req._id).slice(-8)}</td>
+                    <td className="px-6 py-4 text-sm font-medium">{req.clientName || req.full_name || 'N/A'}</td>
+                    <td className="px-6 py-4 text-sm">{t.admin?.typeLabels?.[req.projectType || req.project_type] || req.projectType || req.project_type || 'General'}</td>
                     <td className="px-6 py-4">
                       <span className={`px-2.5 py-1 text-xs font-medium rounded-full ${getStatusClass(req.status)}`}>
                         {t.admin?.statusLabels?.[req.status] || req.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm">
-                      {new Date(req.createdAt).toLocaleDateString(isRTL ? 'ar' : 'en-US')}
+                      {new Date(req.createdAt || req.created_at || Date.now()).toLocaleDateString(isRTL ? 'ar' : 'en-US')}
                     </td>
                   </tr>
                 ))

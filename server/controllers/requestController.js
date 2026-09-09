@@ -135,12 +135,30 @@ export const getRequests = async (req, res) => {
 
     const selectSql = `SELECT pr.*, c.full_name, c.email, c.phone, c.country ${baseSql} ORDER BY ${orderBy} LIMIT ${limit} OFFSET ${offset}`;
 
+const formatRequest = (r) => {
+  if (!r) return r;
+  return {
+    ...r,
+    clientName: r.full_name || r.clientName || '',
+    clientEmail: r.email || r.clientEmail || '',
+    clientPhone: r.phone || r.clientPhone || '',
+    clientLocation: r.country || r.clientLocation || '',
+    projectName: r.project_name || r.projectName || '',
+    projectType: r.project_type || r.projectType || '',
+    referenceNumber: r.reference_number || r.referenceNumber || '',
+    createdAt: r.created_at || r.createdAt || new Date().toISOString(),
+    updatedAt: r.updated_at || r.updatedAt || new Date().toISOString(),
+    additionalRequirements: r.additional_requirements || r.additionalRequirements || '',
+  };
+};
+
     const requests = await query(selectSql, params);
 
     return res.status(200).json({
       success: true,
       data: {
-        requests,
+        requests: requests.map(formatRequest),
+        total,
         pagination: { page, limit, total, totalPages: Math.ceil(total / limit) }
       }
     });
@@ -166,7 +184,7 @@ export const getRequest = async (req, res) => {
       return res.status(404).json({ success: false, error: 'Request not found' });
     }
 
-    const request = requests[0];
+    const request = formatRequest(requests[0]);
     const attachments = await query('SELECT * FROM request_attachments WHERE request_id = ?', [id]);
     request.attachments = attachments;
 

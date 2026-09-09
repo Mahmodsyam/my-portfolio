@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate, Navigate, useLocation, Link } from 'react-r
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   LayoutDashboard, FileText, Users, BarChart3, 
-  Settings, LogOut, Bell, Menu, X, Globe, Moon, Sun 
+  Settings, LogOut, Bell, Menu, X, Globe, Moon, Sun, Mail 
 } from 'lucide-react';
 
 import { useLanguage } from '../../context/LanguageContext';
@@ -17,6 +17,7 @@ import AdminClients from './AdminClients';
 import AdminStatistics from './AdminStatistics';
 import AdminSettings from './AdminSettings';
 import AdminNotifications from './AdminNotifications';
+import AdminMessages from './AdminMessages';
 
 import { dashboardService } from '../../services/dashboardService';
 
@@ -65,11 +66,12 @@ export default function AdminDashboard() {
   };
 
   const navItems = [
-    { path: '/admin', icon: <LayoutDashboard size={20} />, label: t.admin?.nav?.dashboard || 'Dashboard', exact: true },
-    { path: '/admin/requests', icon: <FileText size={20} />, label: t.admin?.nav?.requests || 'Requests' },
-    { path: '/admin/clients', icon: <Users size={20} />, label: t.admin?.nav?.clients || 'Clients' },
-    { path: '/admin/statistics', icon: <BarChart3 size={20} />, label: t.admin?.nav?.statistics || 'Statistics' },
-    { path: '/admin/settings', icon: <Settings size={20} />, label: t.admin?.nav?.settings || 'Settings' },
+    { path: '/admin', icon: <LayoutDashboard size={20} />, label: t.admin?.nav?.dashboard || (isRTL ? 'لوحة التحكم' : 'Dashboard'), exact: true },
+    { path: '/admin/requests', icon: <FileText size={20} />, label: t.admin?.nav?.requests || (isRTL ? 'الطلبات' : 'Requests') },
+    { path: '/admin/messages', icon: <Mail size={20} />, label: isRTL ? 'رسائل التواصل' : 'Messages' },
+    { path: '/admin/clients', icon: <Users size={20} />, label: t.admin?.nav?.clients || (isRTL ? 'العملاء' : 'Clients') },
+    { path: '/admin/statistics', icon: <BarChart3 size={20} />, label: t.admin?.nav?.statistics || (isRTL ? 'الإحصائيات' : 'Statistics') },
+    { path: '/admin/settings', icon: <Settings size={20} />, label: t.admin?.nav?.settings || (isRTL ? 'الإعدادات' : 'Settings') },
   ];
 
   if (authLoading) return <div className="min-h-screen flex items-center justify-center bg-[#040711]"><div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin"></div></div>;
@@ -238,6 +240,7 @@ export default function AdminDashboard() {
             <Route index element={<AdminOverview />} />
             <Route path="requests" element={<AdminRequests />} />
             <Route path="requests/:id" element={<AdminRequestDetail />} />
+            <Route path="messages" element={<AdminMessages />} />
             <Route path="clients" element={<AdminClients />} />
             <Route path="statistics" element={<AdminStatistics />} />
             <Route path="settings" element={<AdminSettings />} />

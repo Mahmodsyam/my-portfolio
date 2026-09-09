@@ -106,24 +106,24 @@ export default function AdminRequestDetail() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <p className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>Name</p>
-                <p className={`font-medium ${isLight ? 'text-slate-900' : 'text-slate-100'}`}>{request.clientName}</p>
+                <p className={`font-medium ${isLight ? 'text-slate-900' : 'text-slate-100'}`}>{request.clientName || request.full_name || 'N/A'}</p>
               </div>
               <div>
                 <p className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>Email</p>
-                <a href={`mailto:${request.clientEmail}`} className={`font-medium flex items-center gap-2 ${isLight ? 'text-blue-600' : 'text-cyan-400'} hover:underline`}>
-                  <Mail size={14} /> {request.clientEmail}
+                <a href={`mailto:${request.clientEmail || request.email}`} className={`font-medium flex items-center gap-2 ${isLight ? 'text-blue-600' : 'text-cyan-400'} hover:underline`}>
+                  <Mail size={14} /> {request.clientEmail || request.email || 'N/A'}
                 </a>
               </div>
               <div>
                 <p className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>Phone</p>
-                <a href={`tel:${request.clientPhone}`} className={`font-medium flex items-center gap-2 ${isLight ? 'text-blue-600' : 'text-cyan-400'} hover:underline`}>
-                  <Phone size={14} /> {request.clientPhone || 'N/A'}
+                <a href={`tel:${request.clientPhone || request.phone}`} className={`font-medium flex items-center gap-2 ${isLight ? 'text-blue-600' : 'text-cyan-400'} hover:underline`}>
+                  <Phone size={14} /> {request.clientPhone || request.phone || 'N/A'}
                 </a>
               </div>
               <div>
                 <p className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>Location</p>
                 <p className={`font-medium flex items-center gap-2 ${isLight ? 'text-slate-900' : 'text-slate-100'}`}>
-                  <MapPin size={14} /> {request.clientLocation || 'N/A'}
+                  <MapPin size={14} /> {request.clientLocation || request.country || 'N/A'}
                 </p>
               </div>
             </div>
@@ -137,20 +137,20 @@ export default function AdminRequestDetail() {
             <div className="space-y-4">
               <div>
                 <p className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>Project Name</p>
-                <p className={`text-lg font-medium ${isLight ? 'text-slate-900' : 'text-slate-100'}`}>{request.projectName}</p>
+                <p className={`text-lg font-medium ${isLight ? 'text-slate-900' : 'text-slate-100'}`}>{request.projectName || request.project_name || 'Untitled'}</p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <p className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>Type</p>
-                  <p className={`font-medium ${isLight ? 'text-slate-900' : 'text-slate-100'}`}>{t.admin?.typeLabels?.[request.projectType] || request.projectType}</p>
+                  <p className={`font-medium ${isLight ? 'text-slate-900' : 'text-slate-100'}`}>{t.admin?.typeLabels?.[request.projectType || request.project_type] || request.projectType || request.project_type || 'General'}</p>
                 </div>
                 <div>
                   <p className={`text-xs flex items-center gap-1 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}><DollarSign size={14} /> Budget</p>
-                  <p className={`font-medium ${isLight ? 'text-slate-900' : 'text-slate-100'}`}>{t.admin?.budgetLabels?.[request.budget] || request.budget}</p>
+                  <p className={`font-medium ${isLight ? 'text-slate-900' : 'text-slate-100'}`}>{t.admin?.budgetLabels?.[request.budget] || request.budget || 'Not specified'}</p>
                 </div>
                 <div>
                   <p className={`text-xs flex items-center gap-1 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}><Calendar size={14} /> Deadline</p>
-                  <p className={`font-medium ${isLight ? 'text-slate-900' : 'text-slate-100'}`}>{request.deadline ? new Date(request.deadline).toLocaleDateString() : 'N/A'}</p>
+                  <p className={`font-medium ${isLight ? 'text-slate-900' : 'text-slate-100'}`}>{request.deadline || 'Flexible'}</p>
                 </div>
               </div>
               <div>
